@@ -1,8 +1,8 @@
-# Utilise une image Nginx officielle comme base
+# Dockerfile (nouveau Dockerfile pour le hot-reload)
 FROM nginx:alpine
 
-# Copie ton fichier HTML dans le dossier par défaut de Nginx
-COPY index.html /usr/share/nginx/html/index.html
+# Copie TOUT le dossier courant dans le conteneur
+COPY . /usr/share/nginx/html
 
-# Expose le port 80 pour le web
+# Expose le port
 EXPOSE 80
