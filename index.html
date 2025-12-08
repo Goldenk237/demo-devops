@@ -3,94 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test DevOps</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Test DevOps - Déploiement Live</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f4f7fa 0%, #e0e7ff 100%);
-            color: #333;
-            margin: 0;
-            padding: 0;
+            font-family: 'Roboto Mono', monospace;
+            color: #e0f2fe;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            text-align: center;
-            overflow: hidden;
-        }
-        .container {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            max-width: 600px;
-            width: 90%;
-            overflow: hidden;
-            animation: fadeIn 1s ease-in-out;
-        }
-        header {
-            background-color: #007bff;
-            color: white;
-            padding: 30px 20px;
             position: relative;
         }
+
+        /* Animation de fond cosmique */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Particules animées en arrière-plan */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(0, 123, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 20s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+
+        .container {
+            z-index: 10;
+            background: rgba(15, 15, 40, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 123, 255, 0.4);
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 700px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 123, 255, 0.5);
+            animation: glowPulse 4s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            from { box-shadow: 0 0 40px rgba(0, 123, 255, 0.5); }
+            to { box-shadow: 0 0 70px rgba(0, 123, 255, 0.8); }
+        }
+
         header i {
-            font-size: 3em;
-            margin-bottom: 10px;
-            opacity: 0.8;
+            font-size: 5rem;
+            color: #00d4ff;
+            text-shadow: 0 0 30px #00d4ff;
+            animation: rocketFloat 6s ease-in-out infinite;
+            margin-bottom: 20px;
         }
+
+        @keyframes rocketFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
         h1 {
-            font-size: 2.5em;
-            margin: 0;
-            animation: slideIn 0.8s ease-out;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.2rem;
+            background: linear-gradient(90deg, #00d4ff, #0099ff, #007bff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 20px 0;
+            letter-spacing: 3px;
         }
-        main {
-            padding: 30px;
-        }
-        p {
-            font-size: 1.2em;
-            margin-bottom: 25px;
+
+        .subtitle {
+            font-size: 1.3rem;
+            margin: 20px 0 40px;
+            opacity: 0.9;
             line-height: 1.6;
         }
+
         .btn {
             display: inline-block;
-            background-color: #28a745;
+            background: linear-gradient(45deg, #28a745, #20c997);
             color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 6px;
+            padding: 16px 40px;
+            font-size: 1.3rem;
             font-weight: bold;
-            transition: transform 0.3s, background-color 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
         }
+
         .btn:hover {
-            background-color: #218838;
-            transform: translateY(-3px);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(40, 167, 69, 0.6);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
-        @keyframes slideIn {
-            from { transform: translateX(-20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+
+        .btn:hover::after {
+            width: 300px;
+            height: 300px;
         }
-        @media (max-width: 480px) {
-            h1 { font-size: 2em; }
-            p { font-size: 1em; }
+
+        .status {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            color: #00ff88;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.6; }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 40px 20px; }
+            header i { font-size: 4rem; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Particules animées -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
         <header>
             <i class="fas fa-rocket"></i>
-            <h1>Bienvenue dans le pipeline DevOps</h1>
+            <h1>PIPELINE DEVOPS</h1>
         </header>
         <main>
-            <p>Cette page démontre un déploiement automatisé via GitHub Actions. Testez, validez et déployez en toute simplicité !</p>
-            <a href="#" class="btn">En savoir plus</a>
+            <p class="subtitle">
+                Déploiement automatisé en temps réel via GitHub Actions<br>
+                Modification → Commit → Push → Site mis à jour instantanément !
+            </p>
+            <a href="#" class="btn">
+                <i class="fas fa-play-circle"></i> Voir le workflow en live
+            </a>
+            <div class="status">
+                <i class="fas fa-circle" style="color:#00ff88"></i> Conteneur en cours d'exécution • Hot-reload actif
+            </div>
         </main>
     </div>
+
+    <script>
+        // Génère des particules flottantes
+        const particlesContainer = document.getElementById('particles');
+        setInterval(() => {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.width = Math.random() * 8 + 'px';
+            p.style.height = p.style.width;
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = Math.random() * 15 + 10 + 's';
+            particlesContainer.appendChild(p);
+            setTimeout(() => p.remove(), 30000);
+        }, 300);
+    </script>
 </body>
 </html>
