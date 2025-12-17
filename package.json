@@ -1,0 +1,19 @@
+{
+  "name": "demo-devops",
+  "version": "1.0.0",
+  "description": "Simple DevOps demo project",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Running tests...\" && exit 0",
+    "lint": "echo \"Linting code...\" && exit 0",
+    "build": "echo \"Building static site...\" && mkdir -p build && cp index.html build/"
+  },
+  "keywords": [
+    "devops",
+    "demo",
+    "ci-cd"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {}
+}
