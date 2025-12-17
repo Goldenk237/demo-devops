@@ -3,273 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEVOPS IS ALIVE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <title>Demo DevOps - Pipeline CI/CD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e1b4b;
+            --light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
         body {
-            font-family: 'Share Tech Mono', monospace;
-            background: #000;
-            color: #0f0;
-            height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             overflow: hidden;
-            perspective: 1000px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle at center, #001122 0%, #000 70%);
         }
 
-        .scene {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            transform-style: preserve-3d;
-            animation: rotateScene 40s infinite linear;
-        }
-
-        @keyframes rotateScene {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        .matrix {
+        .bg-animation span {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(0deg, transparent 50%, rgba(0,255,0,0.03) 100%);
-            pointer-events: none;
-            animation: matrixRain 10s linear infinite;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 15s infinite;
         }
 
-        @keyframes matrixRain {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 1000px; }
+        .bg-animation span:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .bg-animation span:nth-child(2) { left: 20%; animation-delay: 2s; width: 40px; height: 40px; }
+        .bg-animation span:nth-child(3) { left: 35%; animation-delay: 4s; }
+        .bg-animation span:nth-child(4) { left: 50%; animation-delay: 6s; width: 60px; height: 60px; }
+        .bg-animation span:nth-child(5) { left: 65%; animation-delay: 8s; }
+        .bg-animation span:nth-child(6) { left: 80%; animation-delay: 10s; width: 30px; height: 30px; }
+        .bg-animation span:nth-child(7) { left: 90%; animation-delay: 12s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
-        .container {
-            position: relative;
-            z-index: 10;
-            background: rgba(0, 15, 30, 0.6);
-            backdrop-filter: blur(20px);
-            border: 2px solid #0ff;
-            border-radius: 20px;
-            padding: 60px 50px;
-            text-align: center;
-            box-shadow: 
-                0 0 50px #0ff,
-                inset 0 0 50px rgba(0,255,255,0.2);
-            transform: translateZ(100px);
-            animation: neonPulse 3s infinite alternate;
+        /* Header */
+        header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: var(--glass);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes neonPulse {
-            from { box-shadow: 0 0 50px #0ff, inset 0 0 50px rgba(0,255,255,0.2); }
-            to   { box-shadow: 0 0 100px #0ff, inset 0 0 80px rgba(0,255,255,0.4); }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4.5rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #0ff, #f0f, #ff0, #0f0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 30px #0ff;
-            animation: glitch 3s infinite;
-            letter-spacing: 8px;
-        }
-
-        @keyframes glitch {
-            0%,100% { transform: translate(0); }
-            20% { transform: translate(-5px, 5px); }
-            40% { transform: translate(5px, -5px); }
-            60% { transform: translate(-5px, -5px); }
-            80% { transform: translate(5px, 5px); }
-        }
-
-        .rocket {
-            font-size: 8rem;
-            animation: launch 8s infinite;
-            filter: drop-shadow(0 0 40px #0ff);
-        }
-
-        @keyframes launch {
-            0%, 90% { transform: translateY(0) rotate(0); }
-            95% { transform: translateY(-100vh) rotate(20deg); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        .terminal {
-            margin: 30px auto;
-            width: 90%;
-            background: #000;
-            border: 2px solid #0f0;
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 10px;
-            padding: 15px;
-            color: #0f0;
-            font-size: 1.1rem;
-            text-align: left;
-            box-shadow: 0 0 0 20px rgba(0,255,0,0.3);
-            animation: typing 6s steps(80) infinite;
-            white-space: nowrap;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
         }
 
-        @keyframes typing {
-            0% { width: 0; }
-            50% { width: 90%; }
-            100% { width: 0; }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 8px 16px;
+            background: var(--glass);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .badge.success { border-color: var(--secondary); }
+        .badge.success::before { content: "✓"; color: var(--secondary); }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn {
-            margin: 30px 15px;
-            padding: 18px 50px;
-            font-size: 1.5rem;
-            background: transparent;
-            border: 3px solid #0ff;
-            color: #0ff;
+            padding: 15px 35px;
             border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            position: relative;
-            overflow: hidden;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .btn:hover {
-            background: #0ff;
-            color: #000;
-            box-shadow: 0 0 50px #0ff;
-            transform: scale(1.1);
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
         }
 
-        .status {
-            margin-top: 30px;
-            font-size: 1.4rem;
-            color: #0f0;
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
         }
 
-        .live-dot {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            background: #0f0;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 0 20px #0f0;
+        .btn-secondary {
+            background: var(--glass);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        .sound-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: #0ff;
+        /* Pipeline Section */
+        .pipeline-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
             font-size: 2rem;
-            cursor: pointer;
+            margin-bottom: 60px;
+        }
+
+        .pipeline {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .pipeline-step {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            width: 180px;
+            transition: all 0.3s;
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .pipeline-step:nth-child(1) { animation-delay: 0.1s; }
+        .pipeline-step:nth-child(2) { animation-delay: 0.2s; }
+        .pipeline-step:nth-child(3) { animation-delay: 0.3s; }
+        .pipeline-step:nth-child(4) { animation-delay: 0.4s; }
+        .pipeline-step:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pipeline-step:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .pipeline-step .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .pipeline-step h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .pipeline-step p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+        }
+
+        .feature-card .icon {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 80px;
+        }
+
+        footer p {
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .arrow { display: none; }
+            header { padding: 15px 20px; }
+            nav { display: none; }
         }
     </style>
 </head>
 <body>
-
-    <div class="matrix"></div>
-
-    <div class="scene">
-        <div class="container">
-            <button class="sound-btn" onclick="toggleSound()">
-                <i class="fas fa-volume-up" id="soundIcon"></i>
-            </button>
-
-            <div class="rocket">Rocket</div>
-            
-            <h1>PIPELINE DEVOPS</h1>
-            
-            <div class="terminal">
-                $ git add . && git commit -m "deploy épique" && git push<br>
-                → GitHub Actions triggered...<br>
-                → Terraform apply in progress...<br>
-                → Container demo-devops restarted<br>
-                → Hot-reload activé - Site LIVE en 4.2s<br>
-                SUCCESS: Déploiement automatisé terminé !
-            </div>
-
-            <p style="font-size:1.4rem; margin:20px 0;">
-                Modification → Commit → Push → <strong style="color:#0ff">SITE MIS À JOUR EN LIVE</strong>
-            </p>
-
-            <button class="btn" onclick="confettiRain()">LANCER LES CONFETTIS</button>
-            <button class="btn" onclick="location.reload()">REDEPLOYER</button>
-
-            <div class="status">
-                <span class="live-dot"></span> CONTAINER EN COURS • HOT-RELOAD ACTIF • TERRAFORM OK
-            </div>
-        </div>
+    <div class="bg-animation">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span>
     </div>
 
-    <audio id="bgMusic" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/28/audio_8b1d3c8e1e.mp3?filename=cyberpunk-2099-127130.mp3" type="audio/mp3">
-    </audio>
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🚀</div>
+            Demo DevOps
+        </div>
+        <nav>
+            <a href="#pipeline">Pipeline</a>
+            <a href="#features">Features</a>
+            <a href="https://github.com/Goldenk237/demo-devops">GitHub</a>
+        </nav>
+    </header>
 
-    <script>
-        // Musique cyberpunk (désactivable)
-        const audio = document.getElementById('bgMusic');
-        let isPlaying = false;
-        function toggleSound() {
-            if (isPlaying) {
-                audio.pause();
-                document.getElementById('soundIcon').classList.replace('fa-volume-up', 'fa-volume-mute');
-            } else {
-                audio.play();
-                document.getElementById('soundIcon').classList.replace('fa-volume-mute', 'fa-volume-up');
-            }
-            isPlaying = !isPlaying;
-        }
+    <main>
+        <section class="hero">
+            <h1>Pipeline CI/CD Automatisé</h1>
+            <p>Une démonstration complète d'un workflow DevOps moderne avec GitHub Actions, Docker et déploiement automatique.</p>
+            
+            <div class="badge-container">
+                <span class="badge success">CI Pipeline Passing</span>
+                <span class="badge success">Docker Ready</span>
+                <span class="badge success">Auto Deploy</span>
+            </div>
 
-        // Confettis explosifs
-        function confettiRain() {
-            const duration = 5 * 1000;
-            const end = Date.now() + duration;
+            <div class="cta-buttons">
+                <a href="https://github.com/Goldenk237/demo-devops" class="btn btn-primary">
+                    ⭐ Voir sur GitHub
+                </a>
+                <a href="https://github.com/Goldenk237/demo-devops/actions" class="btn btn-secondary">
+                    📊 Actions
+                </a>
+            </div>
+        </section>
 
-            (function frame() {
-                confetti({
-                    particleCount: 7,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 }
-                });
-                confetti({
-                    particleCount: 7,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 }
-                });
+        <section id="pipeline" class="pipeline-section">
+            <h2 class="section-title">🔄 Notre Pipeline CI/CD</h2>
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <div class="icon">📝</div>
+                    <h3>Code</h3>
+                    <p>Push sur GitHub</p>
+                </div>
+                <span class="arrow">→</span>
+                <div class="pipeline-step">
+                    <div class="icon">🧪</div>
+                    <h3>Test</h3>
+                    <p>Tests automatisés</p>
+                </div>
+                <span class="arrow">→</span>
+                <div class="pipeline-step">
+                    <div class="icon">🔨</div>
+                    <h3>Build</h3>
+                    <p>Construction</p>
+                </div>
+                <span class="arrow">→</span>
+                <div class="pipeline-step">
+                    <div class="icon">🐳</div>
+                    <h3>Docker</h3>
+                    <p>Image publiée</p>
+                </div>
+                <span class="arrow">→</span>
+                <div class="pipeline-step">
+                    <div class="icon">🌐</div>
+                    <h3>Deploy</h3>
+                    <p>GitHub Pages</p>
+                </div>
+            </div>
+        </section>
 
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
-        }
+        <section id="features" class="features">
+            <h2 class="section-title">✨ Fonctionnalités</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon">🔀</div>
+                    <h3>Versionning Git</h3>
+                    <p>Gestion complète du code source avec branches main et dev.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">✅</div>
+                    <h3>Intégration Continue</h3>
+                    <p>Tests automatiques à chaque push pour garantir la qualité.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🐳</div>
+                    <h3>Conteneurisation</h3>
+                    <p>Image Docker publiée automatiquement sur Docker Hub.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🚀</div>
+                    <h3>Déploiement Auto</h3>
+                    <p>Déploiement automatique sur GitHub Pages après chaque merge.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🔔</div>
+                    <h3>Notifications</h3>
+                    <p>Alertes GitHub Status et support Discord webhook.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📊</div>
+                    <h3>Monitoring</h3>
+                    <p>Suivi des builds et déploiements via GitHub Actions.</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
-        // Confettis au chargement
-        setTimeout(() => {
-            confetti({
-                particleCount: 200,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        }, 500);
-    </script>
+    <footer>
+        <p>Créé avec ❤️ pour le TP DevOps | <a href="https://github.com/Goldenk237/demo-devops">Goldenk237/demo-devops</a></p>
+    </footer>
 </body>
 </html>
